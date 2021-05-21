@@ -12,82 +12,60 @@ public class Main {
         StringBuilder myLogs = new StringBuilder();
 
         //В папке Games создайте несколько директорий: src, res, savegames, temp
-        File dirSrc = new File(gamesPath+"src");
-        if (dirSrc.mkdir())
-            myLogs.append("Каталог" + dirSrc + " создан.\n");
-
-        File dirRes = new File(gamesPath + "res");
-        if (dirRes.mkdir())
-            myLogs.append("Каталог" + dirRes + " создан.\n");
-
-        File dirSavegames = new File(gamesPath + "savegames");
-        if (dirSavegames.mkdir())
-            myLogs.append("Каталог" + dirSavegames + " создан.\n");
-
-        File dirTemp = new File(gamesPath + "temp");
-        if (dirTemp.mkdir())
-            myLogs.append("Каталог" + dirTemp + " создан.\n");
+        myLogs.append(createDir(gamesPath, "src"));
+        myLogs.append(createDir(gamesPath, "res"));
+        myLogs.append(createDir(gamesPath, "savegames"));
+        myLogs.append(createDir(gamesPath, "temp"));
 
         //В каталоге src создайте две директории: main, test
         String srcPath = gamesPath + "src/";
-        File dirMain = new File(srcPath + "main");
-        if (dirMain.mkdir())
-            myLogs.append("Каталог" + dirMain + " создан.\n");
-
-        File dirTest = new File(srcPath + "test");
-        if (dirTest.mkdir())
-            myLogs.append("Каталог" + dirTest + " создан.\n");
+        myLogs.append(createDir(srcPath, "main"));
+        myLogs.append(createDir(srcPath, "test"));
 
         //В подкаталоге main создайте два файла: Main.java, Utils.java.
-        File fileMainjava = new File(dirMain, "Main.java");
-        try {
-            if (fileMainjava.createNewFile())
-                myLogs.append("Файл " + fileMainjava + " создан.\n"); }
-            catch (IOException ex) {
-                System.out.println(ex.getMessage());
-                myLogs.append(ex.getMessage() + "\n");
-        }
-
-        File fileUtilsjava = new File(dirMain, "Utils.java");
-        try {
-            if (fileUtilsjava.createNewFile())
-                myLogs.append("Файл " + fileUtilsjava + " создан.\n"); }
-        catch (IOException ex) {
-            System.out.println(ex.getMessage());
-            myLogs.append(ex.getMessage() + "\n");
-        }
+        String dirMain = srcPath + "main/";
+        myLogs.append(createFile(dirMain, "Main.java"));
+        myLogs.append(createFile(dirMain, "Utils.java"));
 
         //В каталог res создайте три директории: drawables, vectors, icons.
         String resPath = gamesPath + "res/";
-        File dirDrawables = new File(resPath+"drawables");
-        if (dirDrawables.mkdir())
-            myLogs.append("Каталог" + dirDrawables + " создан.\n");
-
-        File dirVectors = new File(resPath + "vectors");
-        if (dirVectors.mkdir())
-            myLogs.append("Каталог" + dirVectors + " создан.\n");
-
-        File dirIcons = new File(resPath + "icons");
-        if (dirIcons.mkdir())
-            myLogs.append("Каталог" + dirIcons + " создан.\n");
+        myLogs.append(createDir(resPath, "drawables"));
+        myLogs.append(createDir(resPath, "vectors"));
+        myLogs.append(createDir(resPath, "icons"));
 
         //В директории temp создайте файл temp.txt
-        File fileTemptxt = new File(dirTemp, "temp.txt");
-        try {
-            if (fileTemptxt.createNewFile())
-                myLogs.append("Файл " + fileTemptxt + " создан.\n"); }
-        catch (IOException ex) {
-            System.out.println(ex.getMessage());
-            myLogs.append(ex.getMessage() + "\n");
-        }
+        String dirTemp = gamesPath + "temp/";
+        myLogs.append(createFile(dirTemp, "temp.txt"));
 
         //StringBuilder текст запишите в файл temp.txt с помощью класса FileWriter
+        File fileTemptxt = new File(dirTemp, "temp.txt");
         try (FileWriter writer = new FileWriter(fileTemptxt, false)) {
             writer.write(String.valueOf(myLogs));
         }
         catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
+
+    }
+
+    public static String createDir(String path, String name) {
+        File dirSrc = new File(path + name);
+        if (dirSrc.mkdir())
+            return("Каталог" + dirSrc + " создан.\n");
+        else
+            return("Каталог" + dirSrc + " не был создан.\n");
+    }
+
+    public static String createFile(String path, String name) {
+        File fileTemptxt = new File(path, name);
+        try {
+            if (fileTemptxt.createNewFile())
+                return("Файл " + name + " создан.\n");
+            else
+                return("Файл " + name + " не был создан.\n");
+        }
+        catch (IOException ex) {
+            return(ex.getMessage() + "\n");
+        }
     }
 }
-
